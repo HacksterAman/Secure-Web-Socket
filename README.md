@@ -49,7 +49,7 @@ A **production-ready** secure bidirectional chat application built with Rust usi
 
 1. **Clone the repository**:
 ```bash
-git clone https://github.com/yourusername/secure-websocket-chat.git
+git clone https://github.com/HacksterAman/Secure-Web-Socket.git
 cd secure-websocket-chat
 ```
 
@@ -291,23 +291,6 @@ rand = "0.8"              # Random number generation
 - No persistent storage (messages are not saved)
 - Basic error handling (can be enhanced for production)
 
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-### Development Workflow
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Add tests for new functionality
-5. Ensure all tests pass (`cargo test`)
-6. Format code (`cargo fmt`)
-7. Run linter (`cargo clippy`)
-8. Commit changes (`git commit -m 'Add amazing feature'`)
-9. Push to branch (`git push origin feature/amazing-feature`)
-10. Open a Pull Request
-
 ## 📋 Changelog
 
 ### v1.0.0 (Latest)
@@ -332,12 +315,6 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 - ✅ Noise protocol integration
 - ✅ JSON message format
 
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/secure-websocket-chat/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/secure-websocket-chat/discussions)
-- **Security**: For security vulnerabilities, please email security@yourproject.com
-
 ## 🙏 Acknowledgments
 
 - [Noise Protocol](https://noiseprotocol.org) for the cryptographic framework
@@ -356,35 +333,7 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](#license-text) section below for details.
-
-### License Text
-
-```
-MIT License
-
-Copyright (c) 2024 Secure WebSocket Chat Contributors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
----
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 <div align="center">
 
