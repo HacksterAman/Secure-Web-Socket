@@ -50,7 +50,7 @@ A **production-ready** secure bidirectional chat application built with Rust usi
 1. **Clone the repository**:
 ```bash
 git clone https://github.com/HacksterAman/Secure-Web-Socket.git
-cd secure-websocket-chat
+cd Secure-Web-Socket
 ```
 
 2. **Build the project**:
