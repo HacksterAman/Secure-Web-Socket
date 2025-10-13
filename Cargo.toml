@@ -17,6 +17,4 @@ tokio-tungstenite = "0.20"
 futures-util = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-snow = "0.9"
-hex = "0.4"
-rand = "0.8" 
+snow = "0.9" 

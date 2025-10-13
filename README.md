@@ -1,23 +1,22 @@
-# 🔐 Secure WebSocket Chat
+# Secure WebSocket Chat
 
 [![Rust](https://img.shields.io/badge/rust-1.70+-orange.svg)](https://www.rust-lang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Security](https://img.shields.io/badge/Security-Noise%20Protocol-green.svg)](https://noiseprotocol.org)
 [![WebSocket](https://img.shields.io/badge/WebSocket-Secure-blue.svg)](https://tools.ietf.org/html/rfc6455)
 
-A **production-ready** secure bidirectional chat application built with Rust using WebSockets and the **Noise Protocol** for end-to-end encryption with **unpredictable time-based key rotation** that provides protection even during idle periods.
+A secure multi-client chat application built with Rust using WebSockets and the Noise Protocol for end-to-end encryption.
 
-## ✨ Key Features
+## Key Features
 
-- 🔐 **Military-Grade Encryption**: Noise Protocol with `Noise_XXpsk2_25519_AESGCM_SHA256`
-- ⏰ **Time-Based Random Rekeying**: Automatic key rotation every 30-120 seconds
-- 🛡️ **Idle Period Protection**: Security maintained even during inactivity
-- 🎲 **Unpredictable Security**: Random timing prevents all timing analysis attacks
-- 💬 **Real-Time Chat**: Bidirectional encrypted communication
-- 🚀 **High Performance**: Built with Tokio async runtime
-- 📱 **Cross-Platform**: Works on Windows, macOS, and Linux
+- **End-to-End Encryption**: Noise Protocol with `Noise_XXpsk2_25519_AESGCM_SHA256`
+- **Multi-Client Support**: Server handles unlimited concurrent clients using all CPU cores
+- **Named Clients**: Each client provides a name for chat identification
+- **Real-Time Chat**: Encrypted bidirectional communication with message broadcasting
+- **High Performance**: Built with Tokio multi-threaded async runtime
+- **Cross-Platform**: Works on Windows, macOS, and Linux
 
-## 🔒 Security Features
+## Security Features
 
 | Feature | Description |
 |---------|-------------|
@@ -25,18 +24,15 @@ A **production-ready** secure bidirectional chat application built with Rust usi
 | **Mutual Authentication** | Both client and server authenticate each other |
 | **Pre-Shared Key** | Additional security layer with PSK authentication |
 | **Perfect Forward Secrecy** | Session keys derived from ephemeral DH exchange |
-| **Time-Based Rekeying** | Keys rotate on unpredictable time schedule |
-| **Idle Protection** | Security maintained during inactive periods |
-| **Timing Attack Immunity** | Completely unpredictable rekeying intervals |
+| **Multi-Client Isolation** | Each client has independent encrypted session |
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Language**: [Rust](https://www.rust-lang.org) 1.70+
-- **Async Runtime**: [Tokio](https://tokio.rs)
+- **Async Runtime**: [Tokio](https://tokio.rs) (multi-threaded)
 - **WebSocket**: [tokio-tungstenite](https://github.com/snapview/tokio-tungstenite)
 - **Encryption**: [Snow](https://github.com/mcginty/snow) (Noise Protocol)
 - **Serialization**: [Serde](https://serde.rs)
-- **Random Generation**: [rand](https://github.com/rust-random/rand)
 
 ## 📦 Installation
 
@@ -68,177 +64,148 @@ cargo run --bin server
 cargo run --bin client
 ```
 
-## 🎮 Usage
+## Usage
 
-### Server Commands
+### Server
+
+Start the server to accept multiple client connections:
 
 ```bash
-# Start the server
 cargo run --bin server
-
-# Server will display:
-🚀 Secure WebSocket server listening on: 127.0.0.1:8080
-🔐 Using Noise protocol: Noise_XXpsk2_25519_AESGCM_SHA256
-⏰ Time-based random rekeying enabled: 30-120 seconds
 ```
 
-### Client Commands
+The server can send messages to clients:
+- **Broadcast to all**: Just type your message
+- **Send to specific client**: Use `@ClientName message`
+
+Example output:
+```
+Server listening on: 127.0.0.1:8080
+Using Noise protocol: Noise_XXpsk2_25519_AESGCM_SHA256
+Commands: '@ClientName message' to send to specific client, or 'message' to broadcast
+New connection from: 127.0.0.1:54321
+WebSocket connection established
+Starting Noise handshake...
+Secure channel established
+Alice joined the chat
+Alice: Hello everyone!
+Bob joined the chat
+Alice: Hi Bob!
+Bob: Hey Alice!
+> Welcome to the chat!
+Broadcast: Welcome to the chat!
+> @Alice How are you?
+To Alice: How are you?
+Alice: I'm good, thanks!
+```
+
+### Client
+
+Connect to the server and join the chat:
 
 ```bash
-# Connect to server
 cargo run --bin client
-
-# Available commands:
-> Hello, world!          # Send a message
-> status                 # Show connection statistics
-> quit                   # Disconnect gracefully
 ```
 
-### Live Example Session
+The client will:
+1. Connect to the server
+2. Complete secure handshake
+3. Be prompted to enter a name
+4. Start chatting with other clients
 
-**Server Terminal:**
+Example session:
 ```
-🚀 Secure WebSocket server listening on: 127.0.0.1:8080
-🔐 Using Noise protocol: Noise_XXpsk2_25519_AESGCM_SHA256
-⏰ Time-based random rekeying enabled: 30-120 seconds
-📱 New connection from: 127.0.0.1:54321
-✅ WebSocket connection established!
-🤝 Starting Noise handshake...
-🎲 Random rekey interval set: 75 seconds
-🔐 Secure channel established!
-💬 Type messages to send to client:
-> Hello from secure server!
-📤 You: Hello from secure server!
-📨 Client: Hi server! This connection is encrypted!
-⏰ Time-based rekey triggered!
-🔄 Server performing time-based key rotation #1 (total messages: 4)
-✅ Key rotation completed - next rekey in 42 seconds
-```
-
-**Client Terminal:**
-```
-🔗 Connecting to WebSocket server at: ws://127.0.0.1:8080
-⏰ Server-controlled time-based random rekeying enabled
-✅ Connected to server!
-🤝 Starting Noise handshake...
-🔐 Secure channel established!
-💬 Type messages to send to server (or 'status' for info):
-📨 Server: Hello from secure server!
-> Hi server! This connection is encrypted!
-📤 You: Hi server! This connection is encrypted!
-⏰ Received time-based rekey command from server
-🔄 Client performing time-based key rotation #1 (total messages: 4)
-✅ Client key rotation completed - synchronized with server
-> status
-📊 Status - Messages: 4 | Rekeys: 1
+Connecting to server at: ws://127.0.0.1:8080
+Connected to server
+Starting Noise handshake...
+Secure channel established
+Server: Please enter your name:
+> Alice
+Server: Alice joined the chat
+> Hello everyone!
+Server: Bob joined the chat
+Bob: Hey Alice!
+> Hi Bob!
+> quit
+Disconnecting...
+Disconnected
 ```
 
-## 🔧 Configuration
+## Configuration
 
-### Rekey Timing Configuration
+### Server Settings
 
-Adjust random rekeying intervals in `src/server.rs`:
+Modify server address in `src/server.rs`:
 
 ```rust
-const MIN_REKEY_INTERVAL_SECS: u64 = 30;  // Minimum seconds between rekeys
-const MAX_REKEY_INTERVAL_SECS: u64 = 120; // Maximum seconds between rekeys
+const NOISE_PATTERN: &str = "Noise_XXpsk2_25519_AESGCM_SHA256";
+const PSK: &[u8; 32] = b"my_super_secret_pre_shared_key!!";  // Change this!
 ```
 
-### Security Configurations
+### Client Settings
 
-| Setting | High Security | Balanced | Performance |
-|---------|---------------|----------|-------------|
-| **Min Interval** | 15 seconds | 30 seconds | 60 seconds |
-| **Max Interval** | 60 seconds | 120 seconds | 300 seconds |
-| **Use Case** | Critical systems | General use | Low-latency apps |
-
-### Timer Check Frequency
-
-Modify background timer check interval:
+Modify server URL in `src/client.rs`:
 
 ```rust
-let mut interval = tokio::time::interval(Duration::from_secs(5)); // Check every 5 seconds
+let url = "ws://127.0.0.1:8080";
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 ### System Overview
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   Client    │────▶│  WebSocket  │────▶│   Server    │
-│             │     │  (Secure)   │     │             │
-└─────────────┘     └─────────────┘     └─────────────┘
-       │                    │                    │
-       ▼                    ▼                    ▼
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│ Noise Proto │     │ AES-GCM     │     │ Time-Based  │
-│ Handshake   │     │ Encryption  │     │ Rekeying    │
+│  Client A   │────▶│             │◀────│  Client B   │
+│             │     │   Server    │     │             │
+└─────────────┘     │(Multi-Core) │     └─────────────┘
+                    │             │
+┌─────────────┐     │  Broadcast  │     ┌─────────────┐
+│  Client C   │────▶│   System    │◀────│  Client D   │
+│             │     │             │     │             │
 └─────────────┘     └─────────────┘     └─────────────┘
 ```
 
 ### Security Flow
 
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant S as Server
-    participant T as Timer
+1. **Handshake**: Client and server perform Noise protocol XX handshake
+2. **Authentication**: Both parties authenticate using ephemeral and static keys
+3. **Name Exchange**: Server requests client name, client responds
+4. **Chat**: All messages are encrypted, decrypted, and broadcasted to other clients
+5. **Isolation**: Each client has independent encrypted session
 
-    Note over C,S: Noise Protocol Handshake
-    C->>S: e (ephemeral key)
-    S->>C: e, ee, s, es (key exchange + auth)
-    C->>S: s, se (client auth + final exchange)
+## Security Analysis
 
-    Note over C,S: Secure Communication
-    C->>S: Encrypted Chat Message
-    S->>C: Encrypted Chat Message
+### Threat Protection
 
-    Note over T: Background Timer (30-120s)
-    T->>S: Time-based rekey trigger
-    S->>C: Rekey Command
-    Note over C,S: Synchronized Key Rotation
-    C->>S: Rekey Acknowledgment
-```
+| Threat | Protection |
+|--------|------------|
+| **Eavesdropping** | AES-GCM encryption |
+| **MITM Attacks** | Mutual authentication |
+| **Replay Attacks** | Noise protocol nonces |
+| **Key Compromise** | Perfect Forward Secrecy |
 
-## 🛡️ Security Analysis
-
-### Threat Model
-
-| Threat | Protection | Status |
-|--------|------------|--------|
-| **Eavesdropping** | AES-GCM encryption | ✅ Protected |
-| **MITM Attacks** | Mutual authentication | ✅ Protected |
-| **Replay Attacks** | Noise protocol nonces | ✅ Protected |
-| **Timing Attacks** | Random rekey intervals | ✅ Protected |
-| **Key Compromise** | Perfect Forward Secrecy | ✅ Protected |
-| **Idle Attacks** | Time-based rekeying | ✅ Protected |
-
-### Cryptographic Guarantees
+### Cryptographic Properties
 
 - **Confidentiality**: AES-256-GCM encryption
 - **Authenticity**: AEAD authentication tags
 - **Integrity**: Cryptographic message authentication
-- **Forward Secrecy**: Ephemeral key exchange + regular rotation
-- **Non-Repudiation**: Mutual authentication with static keys
+- **Forward Secrecy**: Ephemeral key exchange
 
-## 🧪 Development
+## Development
 
 ### Project Structure
 
 ```
 src/
-├── server.rs          # WebSocket server with time-based rekeying
-├── client.rs          # WebSocket client with sync handling
-└── lib.rs            # Common utilities (optional)
-
+├── server.rs          # Multi-client WebSocket server
+├── client.rs          # WebSocket client
 Cargo.toml            # Dependencies and metadata
-README.md             # This documentation
-.gitignore           # Git ignore patterns
+README.md             # Documentation
 LICENSE              # MIT license
 ```
 
-### Building from Source
+### Building
 
 ```bash
 # Development build
@@ -247,14 +214,11 @@ cargo build
 # Release build (optimized)
 cargo build --release
 
-# Run tests
-cargo test
+# Run server
+cargo run --bin server
 
-# Check code formatting
-cargo fmt --check
-
-# Run linter
-cargo clippy
+# Run client
+cargo run --bin client
 ```
 
 ### Dependencies
@@ -267,53 +231,45 @@ futures-util = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 snow = "0.9"              # Noise protocol implementation
-hex = "0.4"               # Hexadecimal encoding
-rand = "0.8"              # Random number generation
 ```
 
-## 🔍 Security Notes
+## Security Notes
 
-⚠️ **Important Security Considerations**
+**Important Security Considerations**
 
 ### Production Deployment
 
-1. **🔑 Key Management**: Replace hardcoded PSK with proper key distribution
-2. **🌐 Network Security**: Use TLS for transport layer security
-3. **🛡️ Authentication**: Implement robust user authentication
-4. **📊 Monitoring**: Add logging and intrusion detection
-5. **⚡ Performance**: Monitor rekeying frequency for network impact
-6. **🔒 Key Storage**: Secure storage for static keys
+1. **Key Management**: Replace hardcoded PSK with proper key distribution
+2. **Network Security**: Use TLS for transport layer security
+3. **Authentication**: Implement robust user authentication
+4. **Monitoring**: Add logging and intrusion detection
+5. **Key Storage**: Secure storage for static keys
 
 ### Current Limitations
 
 - Uses hardcoded pre-shared key (demo purposes only)
-- Single client connection (can be extended for multiple clients)
 - No persistent storage (messages are not saved)
 - Basic error handling (can be enhanced for production)
 
-## 📋 Changelog
+## Changelog
 
-### v1.0.0 (Latest)
-- ✅ Time-based random rekeying implementation
-- ✅ Idle period protection
-- ✅ Enhanced security with unpredictable intervals
-- ✅ Real-time status tracking
-- ✅ Comprehensive documentation
+### v2.1.0 (Latest)
+- Server can send messages to clients using client names
+- Support for targeted messages (@ClientName) and broadcasts
+- Interactive server command interface
 
-### v0.3.0
-- ✅ Server-controlled rekeying
-- ✅ Control message protocol
-- ✅ Enhanced error handling
+### v2.0.0
+- Multi-client support with broadcast messaging
+- Multi-threaded server using all CPU cores
+- Client name identification system
+- Simplified codebase and removed emojis
+- Cleaner architecture
 
-### v0.2.0
-- ✅ Fixed threshold-based rekeying
-- ✅ Message counting system
-- ✅ Basic status indicators
-
-### v0.1.0
-- ✅ Basic WebSocket communication
-- ✅ Noise protocol integration
-- ✅ JSON message format
+### v1.0.0
+- WebSocket communication
+- Noise protocol integration
+- End-to-end encryption
+- JSON message format
 
 ## 🙏 Acknowledgments
 
