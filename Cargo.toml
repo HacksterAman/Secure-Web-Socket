@@ -3,6 +3,10 @@ name = "secure-websocket"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "secure_websocket"
+path = "src/lib.rs"
+
 [[bin]]
 name = "server"
 path = "src/server.rs"
@@ -10,6 +14,18 @@ path = "src/server.rs"
 [[bin]]
 name = "client"
 path = "src/client.rs"
+
+[[bin]]
+name = "alice"
+path = "src/alice.rs"
+
+[[bin]]
+name = "bob"
+path = "src/bob.rs"
+
+[[bin]]
+name = "qkd_server"
+path = "src/qkd_server.rs"
 
 [dependencies]
 tokio = { version = "1.0", features = ["full"] }
@@ -19,3 +35,7 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 snow = "0.9" 
 etsi014-client = "0.1.2"
+toml = "0.8"
+hex = "0.4"
+reqwest = { version = "0.12", features = ["json", "rustls-tls-native-roots"] }
+data-encoding = "2.6"

@@ -1,0 +1,86 @@
+# QuKayDee (QKD) Configuration
+# ETSI GS QKD 014 Standard Configuration
+# Defines certificate and key mappings for QKD simulation
+
+[general]
+# QKD KME (Key Management Entity) server URL
+kme_url = "https://qukaydee.com:443"
+# Default key size in bytes (256 bits = 32 bytes for AES-256)
+key_size = 32
+# Key retrieval timeout in seconds
+timeout_seconds = 30
+
+# Alice - Client 1 (SAE-1)
+[alice]
+name = "Alice"
+sae_id = "sae-1"
+kme_id = "kme-1"
+# Client certificates and keys
+cert_file = "sae-1.crt"
+key_file = "sae-1.key"
+pem_file = "sae-1.pem"
+# Root CA for verification
+root_ca_file = "client-root-ca.crt"
+# KME server CA
+kme_ca_file = "account-2761-server-ca-qukaydee-com.crt"
+# KME API endpoint
+kme_hostname = "kme-1.acct-2761.etsi-qkd-api.qukaydee.com"
+# Role in the QKD system
+role = "initiator"
+
+# Bob - Client 2 (SAE-2)
+[bob]
+name = "Bob"
+sae_id = "sae-2"
+kme_id = "kme-2"
+# Client certificates and keys
+cert_file = "sae-2.crt"
+key_file = "sae-2.key"
+pem_file = "sae-2.pem"
+# Root CA for verification
+root_ca_file = "client-root-ca.crt"
+# KME server CA
+kme_ca_file = "account-2761-server-ca-qukaydee-com.crt"
+# KME API endpoint
+kme_hostname = "kme-2.acct-2761.etsi-qkd-api.qukaydee.com"
+# Role in the QKD system
+role = "responder"
+
+# Server - SAE-3
+[server]
+name = "Server"
+sae_id = "sae-3"
+kme_id = "kme-3"
+# Server certificates and keys
+cert_file = "sae-3.crt"
+key_file = "sae-3.key"
+pem_file = "sae-3.pem"
+# Root CA for verification
+root_ca_file = "client-root-ca.crt"
+# KME server CA
+kme_ca_file = "account-2761-server-ca-qukaydee-com.crt"
+# KME API endpoint
+kme_hostname = "kme-3.acct-2761.etsi-qkd-api.qukaydee.com"
+# Role in the QKD system
+role = "responder"
+
+# KME Configuration
+[kme]
+# KME endpoints following ETSI GS QKD 014
+base_url = "https://qukaydee.com:443"
+# API endpoints
+status_endpoint = "/api/v1/keys/{slave_SAE_ID}/status"
+enc_keys_endpoint = "/api/v1/keys/{slave_SAE_ID}/enc_keys"
+dec_keys_endpoint = "/api/v1/keys/{master_SAE_ID}/dec_keys"
+
+# Noise Protocol Configuration
+[noise]
+# Noise protocol pattern with PSK
+pattern = "Noise_XXpsk2_25519_AESGCM_SHA256"
+# PSK position in the handshake (2 = after XX pattern messages)
+psk_position = 2
+
+# WebSocket Configuration
+[websocket]
+server_address = "127.0.0.1:8080"
+
